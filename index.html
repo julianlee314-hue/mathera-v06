@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mathera</title>
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&family=STIX+Two+Text:ital@0;1&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
@@ -503,6 +504,85 @@ body.worldwide .app{max-width:1100px}
 body.focus .evline,body.djwide .evline{display:none}
 .evline{margin-bottom:16px}
 .pal .sw b{position:absolute;left:5px;top:8px;width:14px;height:3px;border-radius:2px;box-shadow:0 6px 0 currentColor;background:currentColor}
+/* ===== Lobby: the seven worlds and the skill spotlight (always the first screen) ===== */
+body.lobby{overflow:hidden}
+body.lobby .top,body.lobby .evline{visibility:hidden}
+.brand{cursor:pointer;border-radius:6px}
+#v-lobby{position:fixed;inset:0;z-index:20;display:block;background:#050607;color:#ECEAE3;overflow:hidden;font-family:var(--sans);--lb-ink:#ECEAE3;--lb-mut:rgba(236,234,227,.62);--lb-faint:rgba(236,234,227,.4)}
+#v-lobby :focus-visible{outline:2px solid rgba(255,255,255,.85);outline-offset:-2px}
+.lb-row{position:absolute;inset:0;display:flex;gap:2px;background:#000}
+.lb-p{position:relative;flex:1 1 0;min-width:0;margin:0;padding:0;border:0;border-radius:0;overflow:hidden;background:#0B0C0E;color:inherit;cursor:pointer;text-align:center}
+.lb-p img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50%) 50%;filter:grayscale(1) contrast(1.12) brightness(.6);transform:scale(1.05)}
+.lb-p::after{content:"";position:absolute;inset:0;box-shadow:inset 1px 0 0 rgba(255,255,255,.05),inset -1px 0 0 rgba(0,0,0,.6);pointer-events:none}
+.lb-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(4,5,6,.94) 0%,rgba(4,5,6,.55) 18%,rgba(4,5,6,0) 42%),linear-gradient(to bottom,rgba(4,5,6,.7) 0%,rgba(4,5,6,0) 16%)}
+.lb-cap{position:absolute;left:6px;right:6px;bottom:clamp(20px,5vh,46px);display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.9)}
+.lb-cap i{font-family:var(--math);font-style:normal;font-size:12px;letter-spacing:.24em;color:var(--lb-mut)}
+.lb-cap b{font-family:var(--math);font-weight:400;font-size:clamp(13px,1.3vw,21px);letter-spacing:.17em;text-transform:uppercase;color:var(--lb-ink);white-space:nowrap}
+.lb-cap small{font-family:var(--math);font-style:italic;font-size:13px;line-height:1.3;color:var(--lb-mut);opacity:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-rule{display:block;width:22px;height:1px;background:rgba(236,234,227,.35)}
+.lb-p.on,.lb-p:focus-visible{flex-grow:1.5}
+.lb-p.on img,.lb-p:focus-visible img{filter:grayscale(0) contrast(1) brightness(.95);transform:scale(1)}
+.lb-p.on .lb-cap small,.lb-p:focus-visible .lb-cap small{opacity:1}
+@media (hover:hover){
+  .lb-p:hover{flex-grow:1.5}
+  .lb-p:hover img{filter:grayscale(0) contrast(1) brightness(.95);transform:scale(1)}
+  .lb-p:hover .lb-cap small{opacity:1}
+}
+@media (prefers-reduced-motion:no-preference){
+  .lb-p{transition:flex-grow .55s cubic-bezier(.2,.7,.2,1)}
+  .lb-p img{transition:filter .6s ease,transform 1.4s cubic-bezier(.2,.7,.2,1)}
+  .lb-cap small{transition:opacity .4s ease}
+  #v-lobby:not([hidden]) .lb-p{animation:lbIn .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * 60ms)}
+  #v-lobby:not([hidden]) .lb-spot{animation:lbFade .7s .35s ease both}
+}
+@keyframes lbIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes lbFade{from{opacity:0}to{opacity:1}}
+.lb-mark{position:absolute;top:18px;left:22px;z-index:4;font-weight:600;font-size:13px;letter-spacing:.34em;color:rgba(236,234,227,.88);pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,.8)}
+.lb-mark span{font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.08em;color:var(--lb-faint);margin-left:6px}
+.lb-cont{position:absolute;top:12px;right:16px;z-index:4;border:1px solid rgba(255,255,255,.16);background:rgba(10,11,13,.42);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:var(--lb-ink);border-radius:999px;padding:6px 14px;font-size:13px;letter-spacing:.01em}
+.lb-cont:hover{background:rgba(255,255,255,.12)}
+.lb-spot{position:absolute;left:50%;top:50%;z-index:5;width:min(560px,calc(100vw - 32px));transform:translate(-50%,-50%)}
+.lb-bar{display:flex;align-items:center;gap:12px;height:58px;padding:0 14px 0 18px;border-radius:17px;background:rgba(18,20,24,.58);-webkit-backdrop-filter:blur(22px) saturate(1.3);backdrop-filter:blur(22px) saturate(1.3);border:1px solid rgba(255,255,255,.15);box-shadow:0 24px 70px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+.lb-bar:focus-within{background:rgba(20,22,26,.66);border-color:rgba(255,255,255,.3)}
+.lb-bar svg{flex:none;color:var(--lb-mut)}
+.lb-bar input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;color:#F5F3EC;font:400 19px/1.2 var(--sans);letter-spacing:-.01em;-webkit-appearance:none;appearance:none}
+#v-lobby .lb-bar input:focus-visible{outline:0}
+.lb-bar input::placeholder{color:rgba(236,234,227,.55)}
+.lb-bar input::-webkit-search-cancel-button,.lb-bar input::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+.lb-bar kbd{flex:none;font-family:var(--mono);font-size:11px;color:var(--lb-mut);border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:2px 7px}
+.lb-hint{position:absolute;left:0;right:0;top:calc(100% + 14px);margin:0;text-align:center;font-family:var(--math);font-style:italic;font-size:14px;color:var(--lb-mut);text-shadow:0 1px 3px rgba(0,0,0,.9);pointer-events:none}
+.lb-list{position:absolute;left:0;right:0;top:calc(100% + 8px);max-height:min(52vh,430px);overflow-y:auto;overscroll-behavior:contain;padding:6px;border-radius:15px;background:rgba(14,16,19,.88);-webkit-backdrop-filter:blur(26px) saturate(1.3);backdrop-filter:blur(26px) saturate(1.3);border:1px solid rgba(255,255,255,.13);box-shadow:0 24px 70px rgba(0,0,0,.65)}
+.lb-meta{padding:5px 12px 7px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--lb-faint)}
+.lb-opt{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:1px 10px;align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer}
+.lb-opt[aria-selected="true"]{background:rgba(255,255,255,.12)}
+.lb-opt .n{grid-row:1/3;font-family:var(--math);font-size:13px;letter-spacing:.06em;color:var(--lb-mut);text-align:center;border-right:1px solid rgba(255,255,255,.12);padding-right:8px}
+.lb-opt b{font-weight:500;font-size:15.5px;color:#F5F3EC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-opt b mark{background:none;color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.45);text-underline-offset:3px}
+.lb-opt small{grid-column:2;font-size:12.5px;color:var(--lb-mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-opt .st{grid-row:1/3;grid-column:3;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--lb-faint)}
+.lb-opt .st.on{color:rgba(236,234,227,.85)}
+.lb-empty{padding:14px 12px;color:var(--lb-mut);font-size:14px}
+@media (max-width:720px){
+  #v-lobby{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .lb-veil{position:fixed;left:0;right:0;top:0;height:124px;z-index:3;background:linear-gradient(to bottom,rgba(5,6,7,.96) 0%,rgba(5,6,7,.85) 70%,rgba(5,6,7,0) 100%);pointer-events:none}
+  .lb-mark,.lb-cont{position:fixed}
+  .lb-row{position:relative;inset:auto;flex-direction:column;padding:118px 0 18px;background:#050607}
+  .lb-p{flex:none;height:clamp(104px,18vh,160px);transition:none}
+  .lb-p.on,.lb-p:focus-visible{flex-grow:0}
+  .lb-p img{object-position:50% 45%}
+  .lb-shade{background:linear-gradient(to right,rgba(4,5,6,.9) 0%,rgba(4,5,6,.45) 45%,rgba(4,5,6,.1) 100%)}
+  .lb-cap{left:20px;right:20px;top:50%;bottom:auto;transform:translateY(-50%);align-items:flex-start;gap:4px;text-align:left}
+  .lb-cap .lb-rule{display:none}
+  .lb-cap b{font-size:20px}
+  .lb-cap small{opacity:1;font-size:12.5px}
+  .lb-spot{position:fixed;top:52px;transform:translateX(-50%)}
+  .lb-bar{height:50px;border-radius:14px}
+  .lb-bar input{font-size:17px}
+  .lb-bar kbd,.lb-hint{display:none}
+  .lb-list{max-height:calc(100vh - 140px)}
+  @media (prefers-reduced-motion:no-preference){#v-lobby:not([hidden]) .lb-spot{animation:none}}
+}
+@media (prefers-reduced-motion:reduce){.lb-p img{transform:none}}
 </style>
 <script>try{var __p=localStorage.getItem("mathera-palette");if(__p&&__p!=="garden")document.documentElement.setAttribute("data-palette",__p)}catch(e){}</script>
 
@@ -519,6 +599,23 @@ body.focus .evline,body.djwide .evline{display:none}
   </div>
 
   <p class="evline" id="evLine" hidden></p>
+  <!-- LOBBY: the seven worlds, always the first screen -->
+  <section class="view" id="v-lobby" hidden aria-label="Mathera: choose a world">
+    <div class="lb-row" id="lbRow" role="group" aria-label="The seven Eras"></div>
+    <div class="lb-veil" aria-hidden="true"></div>
+    <div class="lb-mark">MATHERA<span>v0.6</span></div>
+    <button class="lb-cont" id="lbCont"></button>
+    <div class="lb-spot" id="lbSpot">
+      <div class="lb-bar">
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <input id="lbQ" type="search" role="combobox" aria-expanded="false" aria-controls="lbList" aria-autocomplete="list" aria-label="Search every skill in every Era" placeholder="Search any skill" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+        <kbd id="lbKbd" aria-hidden="true">Ctrl K</kbd>
+      </div>
+      <p class="lb-hint" id="lbHint">Hover a world, click to enter it</p>
+      <div class="lb-list" id="lbList" role="listbox" aria-label="Skills" hidden></div>
+    </div>
+  </section>
+
   <section class="view" id="v-loading" hidden><p class="nextline" style="padding:60px 0">Opening your garden…</p></section>
 
   <!-- WELCOME / PLACEMENT -->
@@ -42287,12 +42384,12 @@ function teleSave() {
 
 /* ================= views ================= */
 let view = 'home';
-const VIEWS = ['loading', 'welcome', 'home', 'alarm', 'practice', 'id', 'rules', 'report', 'world'];
+const VIEWS = ['lobby', 'loading', 'welcome', 'home', 'alarm', 'practice', 'id', 'rules', 'report', 'world'];
 function show(v) {
   if (v !== 'report') RSRC = null;
-  view = v; VIEWS.forEach(x => $('v-' + x).hidden = x !== v); document.body.classList.toggle('focus', v === 'practice'); document.body.classList.toggle('worldwide', v === 'world');
+  view = v; VIEWS.forEach(x => $('v-' + x).hidden = x !== v); document.body.classList.toggle('focus', v === 'practice'); document.body.classList.toggle('worldwide', v === 'world'); document.body.classList.toggle('lobby', v === 'lobby');
   document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.v === v || ((v === 'practice' || v === 'alarm' || v === 'world') && b.dataset.v === 'home' || v === 'report' && b.dataset.v === 'id') ? 'page' : 'false'));
-  if (v === 'home') renderHome(); if (v === 'id') renderID(); if (v === 'rules') renderRules(); if (v === 'welcome') renderWelcome(); if (v === 'report') renderReport(); if (v === 'world') renderWorld();
+  if (v === 'home') renderHome(); if (v === 'id') renderID(); if (v === 'rules') renderRules(); if (v === 'welcome') renderWelcome(); if (v === 'report') renderReport(); if (v === 'world') renderWorld(); if (v === 'lobby') renderLobby();
   window.scrollTo(0, 0);
 }
 $('tabs').addEventListener('click', e => { const b = e.target.closest('button[data-v]'); if (!b) return; if (view === 'practice') leavePractice(); show(!META.placed[era] && b.dataset.v === 'home' ? 'welcome' : b.dataset.v); });
@@ -43804,10 +43901,118 @@ $('repSave').addEventListener('click', async () => {
 $('repBack').addEventListener('click', () => show(RSRC ? 'rules' : 'id'));
 $('reportOpen').addEventListener('click', () => show('report'));
 
+/* ================= Lobby: the seven worlds + the skill spotlight =================
+   Always the first screen. Each painting is a door: hover (or a first tap) brings it into colour, a click opens that
+   Era's world through openWorld(). The spotlight searches every skill in every Era with the same matching rule as
+   DJ mode's finder, and opens a skill through startFocus(), exactly like tapping it in the tree's skill list. */
+const LOBBY_NAME = { VI: 'Change', VII: 'Space' };   // Eras VI and VII have paintings and planned branches, no skills yet
+const LOBBY_POS = { I: '64%', II: '50%', III: '45%', IV: '56%', V: '50%', VI: '60%', VII: '50%' };   // where each painting's subject sits
+const lobbyName = k => ERAS[k] ? ERAS[k].name : (LOBBY_NAME[k] || WORLDS[k].name.replace(/^The /, ''));
+const LB_MAC = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '');
+let lbArmed = null, lbPtr = '', lbHits = [], lbSel = 0;
+function renderLobby() {
+  const t = now();
+  $('lbRow').innerHTML = WORLD_KEYS.map((k, i) => {
+    let sub = WORLDS[k].name;
+    if (ERAS[k]) { const c = MM.counts(PS[k], t), n = PS[k].order.length; sub += META.placed[k] || c.seed < n ? ` · ${c.proven + c.thirsty} of ${n} proven` : ` · ${n} skills`; }
+    else sub += ' · coming later';
+    return `<button class="lb-p" data-k="${k}" style="--pos:${LOBBY_POS[k] || '50%'};--i:${i}" aria-label="Era ${k}, ${esc(lobbyName(k))}. ${esc(sub)}. Open this world."><img src="${WORLD_ART[k].img}" alt="" decoding="async" draggable="false"><span class="lb-shade"></span><span class="lb-cap"><i>${k}</i><b>${esc(lobbyName(k))}</b><span class="lb-rule"></span><small>${esc(sub)}</small></span></button>`;
+  }).join('');
+  $('lbCont').textContent = META.placed[era] ? `Your tree · Era ${era} →` : `Start Era ${era} →`;
+  $('lbKbd').textContent = LB_MAC ? '⌘K' : 'Ctrl K';
+  $('lbHint').textContent = matchMedia('(hover: none)').matches ? 'Tap a world to light it, tap again to enter' : 'Hover a world, click to enter it';
+  lbArmed = null; lobbySearch();
+}
+function lobbyArm(p) { lbArmed = p; $('lbRow').querySelectorAll('.lb-p').forEach(x => x.classList.toggle('on', x === p)); }
+function lobbyEnter(k) {
+  if (!WORLD_ART[k]) return;
+  if (ERAS[k] && k !== era) { setEra(k); S = MM.session(); save(); }   // same switch worldGo() makes
+  openWorld(k);
+}
+function goLobby() {
+  const dj = $('v-dj');
+  if (dj && !dj.hidden) { dj.hidden = true; $('djTab').setAttribute('aria-current', 'false'); document.body.classList.remove('djwide'); }
+  if (view === 'practice') leavePractice();
+  show('lobby');
+}
+$('lbRow').addEventListener('pointerdown', e => { lbPtr = e.pointerType; });
+$('lbRow').addEventListener('click', e => {
+  const p = e.target.closest('.lb-p'); if (!p) return;
+  const touch = lbPtr === 'touch' && e.detail !== 0; lbPtr = '';
+  if (touch && lbArmed !== p) { lobbyArm(p); return; }   // touch: first tap brings it into colour, second tap opens
+  lobbyEnter(p.dataset.k);
+});
+$('lbCont').addEventListener('click', () => show(META.placed[era] ? 'home' : 'welcome'));
+document.querySelector('.top .brand').setAttribute('role', 'button');
+document.querySelector('.top .brand').setAttribute('tabindex', '0');
+document.querySelector('.top .brand').setAttribute('title', 'All seven worlds');
+document.querySelector('.top .brand').addEventListener('click', goLobby);
+document.querySelector('.top .brand').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goLobby(); } });
+
+/* ---- spotlight ---- */
+const LB_IDX = ALL_SKILLS.map((s, i) => { const u = MM.unitOf(s.id), nl = s.name.toLowerCase();
+  return { id: s.id, k: eraOf(s.id), u, i, name: s.name, nl, ul: (UNAME[u] || '').toLowerCase(), hay: (s.id + ' ' + s.name + ' ' + (UNAME[u] || '') + ' ' + Object.values(s.steps || {}).map(x => x && x.t || '').join(' ')).toLowerCase() }; });
+const lbRe = w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function lobbyMatch(q) {
+  const t = q.trim().toLowerCase(); if (!t) return [];
+  const words = t.split(/\s+/);
+  const hits = LB_IDX.filter(s => words.every(w => s.hay.includes(w) || s.id.toLowerCase().startsWith(w)));   // DJ mode's rule
+  const rank = s => s.nl.startsWith(t) ? 0 : words.every(w => new RegExp('(^|[^a-z0-9])' + lbRe(w)).test(s.nl)) ? 1 : words.every(w => s.nl.includes(w)) ? 2 : words.every(w => s.ul.includes(w) || s.id.toLowerCase().startsWith(w)) ? 3 : 4;
+  return hits.map(s => [rank(s), s]).sort((a, b) => a[0] - b[0] || a[1].i - b[1].i).map(x => x[1]);
+}
+function lobbyMark(name, q) {
+  const words = q.trim().split(/\s+/).filter(Boolean).sort((a, b) => b.length - a.length).map(lbRe);
+  if (!words.length) return esc(name);
+  const re = new RegExp('(' + words.join('|') + ')', 'ig'); let out = '', last = 0, m;
+  while ((m = re.exec(name))) { if (!m[0]) { re.lastIndex++; continue; } out += esc(name.slice(last, m.index)) + '<mark>' + esc(m[0]) + '</mark>'; last = m.index + m[0].length; }
+  return out + esc(name.slice(last));
+}
+function lobbySearch() {
+  const inp = $('lbQ'), q = inp.value, list = $('lbList');
+  if (!q.trim()) { lbHits = []; list.hidden = true; list.innerHTML = ''; inp.setAttribute('aria-expanded', 'false'); inp.removeAttribute('aria-activedescendant'); $('lbHint').hidden = false; return; }
+  const all = lobbyMatch(q), t = now(); lbHits = all.slice(0, 60); lbSel = 0;
+  list.innerHTML = lbHits.length
+    ? `<div class="lb-meta" role="presentation">${all.length} skill${all.length > 1 ? 's' : ''}${all.length > lbHits.length ? ` · first ${lbHits.length}` : ''}</div>` + lbHits.map((s, i) => { const st = MM.state(PS[s.k], s.id, t);
+      return `<div class="lb-opt" role="option" id="lbo-${i}" data-i="${i}" aria-selected="${i === 0}"><span class="n">${s.k}</span><b>${lobbyMark(s.name, q)}</b><small>Era ${s.k} · ${esc(ERAS[s.k].name)} · ${esc(s.u)} ${esc(UNAME[s.u] || '')}</small><span class="st${st !== 'seed' ? ' on' : ''}">${st === 'seed' ? s.id.split('.').slice(1).join('.') : STATE_WORD[st]}</span></div>`; }).join('')
+    : `<div class="lb-empty">No skill matches “${esc(q.trim())}”. Try a shorter word, or a unit code like II.5.</div>`;
+  list.hidden = false; list.scrollTop = 0; $('lbHint').hidden = true;
+  inp.setAttribute('aria-expanded', 'true'); if (lbHits.length) inp.setAttribute('aria-activedescendant', 'lbo-0'); else inp.removeAttribute('aria-activedescendant');
+}
+function lobbySelect(i) {
+  if (!lbHits.length) return; lbSel = (i + lbHits.length) % lbHits.length;
+  $('lbList').querySelectorAll('.lb-opt').forEach(o => o.setAttribute('aria-selected', +o.dataset.i === lbSel));
+  const o = $('lbo-' + lbSel); if (o) { o.scrollIntoView({ block: 'nearest' }); $('lbQ').setAttribute('aria-activedescendant', o.id); }
+}
+function lobbyPick(i) {
+  const s = lbHits[i]; if (!s || !ERAS[s.k] || !BY[s.id]) return;
+  $('lbQ').value = ''; lobbySearch(); $('lbQ').blur();
+  if (s.k !== era) { setEra(s.k); S = MM.session(); save(); }
+  selUnit = s.u;
+  startFocus(s.id);   // the same call as tapping the skill in the tree's list
+}
+$('lbQ').addEventListener('input', lobbySearch);
+$('lbQ').addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); lobbySelect(lbSel + 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); lobbySelect(lbSel - 1); }
+  else if (e.key === 'Enter') { e.preventDefault(); if (lbHits.length) lobbyPick(lbSel); }
+  else if (e.key === 'Escape') { e.preventDefault(); if (e.target.value) { e.target.value = ''; lobbySearch(); } else e.target.blur(); }
+});
+$('lbList').addEventListener('mousedown', e => e.preventDefault());   // keep focus in the bar
+$('lbList').addEventListener('mousemove', e => { const o = e.target.closest('.lb-opt'); if (o && +o.dataset.i !== lbSel) lobbySelect(+o.dataset.i); });
+$('lbList').addEventListener('click', e => { const o = e.target.closest('.lb-opt'); if (o) lobbyPick(+o.dataset.i); });
+document.addEventListener('keydown', e => {
+  const k = e.key && e.key.toLowerCase();
+  if (k === 'k' && (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey) {
+    const dj = $('v-dj'); if (dj && !dj.hidden) return;   // DJ mode has its own finder
+    e.preventDefault(); if (view !== 'lobby') goLobby(); $('lbQ').focus(); $('lbQ').select(); return;
+  }
+  if (view === 'lobby' && e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) { e.preventDefault(); $('lbQ').focus(); }
+});
+
 const hadLocal = loadLocal();
 if (!META.pseudo) META.pseudo = 't' + Math.random().toString(36).slice(2, 10);
 setEra(ERAS[META.era] ? META.era : 'II');
-const firstView = () => show(META.placed[era] ? 'home' : 'welcome');
+const firstView = () => show('lobby');   // the seven worlds always come first, for new and returning learners
 if (hadLocal) firstView(); else show('loading');
 setSaved('Saved on this device');
 (async () => {
@@ -43849,7 +44054,7 @@ async function boot() {
     }
     save(); flush();
     selUnit = META.start[era] || selUnit;
-    if (view === 'welcome' && META.placed[era]) show('home'); else if (view === 'home') renderHome(); else if (view === 'id') renderID(); else if (view === 'rules') renderRules();
+    if (view === 'welcome' && META.placed[era]) show('home'); else if (view === 'home') renderHome(); else if (view === 'id') renderID(); else if (view === 'rules') renderRules(); else if (view === 'lobby') renderLobby();
   } catch (e) { remote = false; console.warn('mathera sync', e); }
 }
 applyPalette();
